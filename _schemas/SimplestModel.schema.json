@@ -1,0 +1,27 @@
+{
+  "title": "SimplestModel",
+  "type": "object",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "integer"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "array": {
+      "title": "Array",
+      "type": "array",
+      "items": {}
+    },
+    "object": {
+      "title": "Object",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "name"
+  ]
+}
