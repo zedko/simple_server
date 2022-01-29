@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "name": "ObiWan",
+  "array": ["LightSaber", "LongJumps"],
+  "object": {
+    "1int": 1,
+    "2str": "2"
+  }
+}
