@@ -1,20 +1,24 @@
+# TODO global.
+#  1) Запихонить все в докер или на хероку
+#  2) Сделать простой спопоб "загрузить" json и его получать по имени файла https://fastapi.tiangolo.com/tutorial/path-params/#path-convertor
+
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from models import SimplestModel
 
 app = FastAPI()
 
 
-# TODO use proper http error for the exception
+# TODO fix documentation
 @app.get("/simplest/{file_name}")
-def simplest(file_name: str) -> dict | SimplestModel.schema_json():
+def simplest(file_name: str) -> SimplestModel.schema():
     try:
         return SimplestModel.from_json_file(file_name).dict()
     except FileNotFoundError as ex:
-        return {"error": f"File {file_name}.json not found",
-                "full_path": ex.filename}
+        raise HTTPException(status_code=404,
+                            detail={"error": f"File {file_name}.json not found", "full_path": ex.filename})
 
 
 @app.get("/")
