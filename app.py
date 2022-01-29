@@ -1,15 +1,28 @@
-from typing import Optional
+from __future__ import annotations
 
 from fastapi import FastAPI
+
+from models import SimplestModel
 
 app = FastAPI()
 
 
+# TODO use proper http error for the exception
+@app.get("/simplest/{file_name}")
+def simplest(file_name: str) -> dict | SimplestModel.schema_json():
+    try:
+        return SimplestModel.from_json_file(file_name).dict()
+    except FileNotFoundError as ex:
+        return {"error": f"File {file_name}.json not found",
+                "full_path": ex.filename}
+
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+async def read_root():
+    hide_urls = {'/openapi.json', '/docs/oauth2-redirect', '/'}
+    doc_urls = {'/docs', '/redoc'}
+    a = app
+    return {
+        "url_list": f"{[route.path for route in app.router.routes if route.path not in hide_urls | doc_urls]}",
+        "docs": doc_urls
+    }
